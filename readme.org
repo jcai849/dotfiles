@@ -1,0 +1,1206 @@
+#+TITLE:Dotfiles
+
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:nil todo:t |:t
+
+#+author: Jason Cairns
+#+email: jcai849@aucklanduni.ac.nz
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 26.1 (Org mode 9.2.3)
+
+#+latex_class: article
+#+LATEX_CLASS_OPTIONS: [a4paper, 11pt]
+#+LATEX_HEADER: \usepackage{natbib}
+#+LATEX_HEADER: \usepackage{minted}
+#+LATEX_HEADER: \usepackage{mathtools}
+#+LATEX_HEADER: \usepackage{amsfonts}
+#+latex_header_extra:
+#+description:
+#+keywords:
+#+subtitle:
+#+date: \today
+
+* Introduction
+  The following is a description of my dotfiles, used for configuring
+  the programs I use. Dotfiles composed by others have been made heavy
+  use of. GNU Stow is used to manage the files; the =stow= file in this
+  folder is a bash script that will automatically symlink all the
+  dotfiles correctly in the home folder.
+  #+begin_src bash :tangle stow_my_dotfiles
+#!/usr/bin/env bash
+stow X
+stow stumpwm
+stow bash
+stow emacs
+  #+end_src
+
+* X
+  X is the current windowing system for most GNU/Linux distributions,
+  controlling how graphics are drawn on the screen. Important to keep in
+  mind is the client/server structure of Xorg, as well as the age; there
+  are mostly-deprecated systems that are kept around for dependency
+  purposes. Usefully for our knowledge in customisation of fonts, is
+  also of two systems: old server-based bitmapped /core/ fonts, and new
+  client-based ttf /Xft/ fonts. [[https://en.wikibooks.org/wiki/Guide_to_X11/Fonts#Core_versus_Xft_fonts][X11 wikibook]] has further information.
+
+** Xresources
+   ~/.Xresources are like the CSS of the X system for all X applications. An
+   application can be launched with the switch =-xrm "X resource"= to be
+   modified directly. Useful resources include:
+   https://stuff.mit.edu/afs/sipb/project/doc/ixresources/xres.html
+   http://futurile.net/2016/06/14/xterm-setup-and-truetype-font-configuration/
+
+*** Display
+    Carloine's HiDPI monitor requires a manual dpi setting of 144; mine
+    acts ok by default.
+    #+begin_src conf :tangle ~/dotfiles/X/.Xresources
+      Xft.dpi: 144
+    #+end_src
+*** Fonts
+    The general fonts are set as the following:
+    #+begin_src conf :tangle ~/dotfiles/X/.Xresources
+      ,*faceName: Inconsolata
+      ,*faceSize: 10
+      ,*renderFont: true
+      Xft.autohint: 0
+      Xft.lcdfilter:  lcddefault
+      Xft.hintstyle:  hintfull
+      Xft.hinting: 1
+      Xft.antialias: 1
+      Xft.rgba: rgb
+    #+end_src
+
+*** Colours
+    Colours are set according to the solarized colour scheme:
+    #+begin_src conf :tangle ~/dotfiles/X/.Xresources
+      #define S_base03        #002b36
+      #define S_base02        #073642
+      #define S_base01        #586e75
+      #define S_base00        #657b83
+      #define S_base0         #839496
+      #define S_base1         #93a1a1
+      #define S_base2         #eee8d5
+      #define S_base3         #fdf6e3
+
+      ,*background:            S_base03
+      ,*foreground:            S_base0
+      ,*fadeColor:             S_base03
+      ,*cursorColor:           S_base1
+      ,*pointerColorBackground:S_base01
+      ,*pointerColorForeground:S_base1
+
+      #define S_yellow        #b58900
+      #define S_orange        #cb4b16
+      #define S_red           #dc322f
+      #define S_magenta       #d33682
+      #define S_violet        #6c71c4
+      #define S_blue          #268bd2
+      #define S_cyan          #2aa198
+      #define S_green         #859900
+
+      !! black dark/light
+      ,*color0:                S_base02
+      ,*color8:                S_base03
+
+      !! red dark/light
+      ,*color1:                S_red
+      ,*color9:                S_orange
+
+      !! green dark/light
+      ,*color2:                S_green
+      ,*color10:               S_base01
+
+      !! yellow dark/light
+      ,*color3:                S_yellow
+      ,*color11:               S_base00
+
+      !! blue dark/light
+      ,*color4:                S_blue
+      ,*color12:               S_base0
+
+      !! magenta dark/light
+      ,*color5:                S_magenta
+      ,*color13:               S_violet
+
+      !! cyan dark/light
+      ,*color6:                S_cyan
+      ,*color14:               S_base1
+
+      !! white dark/light
+      ,*color7:                S_base2
+      ,*color15:               S_base3
+    #+end_src
+
+*** Emacs-Specific
+    Emacs-specific resources are set as:
+    #+begin_src conf :tangle ~/dotfiles/X/.Xresources
+      Emacs.font: Inconsolata-12
+      Emacs.menuBar: off
+      Emacs.verticalScrollBars: off
+      Emacs.toolBar: off
+      Emacs.fullscreen: maximized
+    #+end_src
+
+*** URxvt-Specific
+    URxvt-specific resources are set as the following, taking heavy inspiration from https://www.askapache.com/linux/rxvt-xresources/
+    #+begin_src conf :tangle ~/dotfiles/X/.Xresources
+      URxvt.font: xft:Inconsolata:size=12
+      URxvt.modifier: mod1
+      URxvt*loginShell: true
+      URxvt.borderless: true
+      URxvt*dynamicColors: on
+      URxvt*letterSpace: -1
+      URxvt.geometry: WINDOWGEOMETRY
+      URxvt.imLocale: en_US.UTF-8
+      URxvt.lineSpace: 0
+      URxvt.loginShell: true
+      URxvt.saveLines: 5000
+      URxvt.scrollBar: true
+      URxvt.scrollstyle: plain
+      URxvt*termName: xterm-256color
+      URxvt.visualBell: false
+      URxvt.fading: 15
+      ! URxvt.urgentOnBell: true
+      ! URxvt.urlLauncher: chrome
+      ! URxvt.internalBorder: 3
+      ! URxvt.depth: 24
+      ! URxvt.letterSpace: -1
+      ! URxvt.shading: 100
+      ! URxvt.perl-ext-common:  default,tabbed,clipboard
+      ! URxvt.tabbed.tabbar-fg: 4
+      ! URxvt.tabbed.tabbar-bg: 0
+      ! URxvt.tabbed.tab-fg:    9
+      ! URxvt.tabbed.tab-bg:    0
+      ! URxvt.keysym.M-c:   perl:clipboard:copy
+      ! URxvt.keysym.M-v:   perl:clipboard:paste
+    #+end_src
+
+** xinitrc
+   ~/.xinitrc is a bash script that defines how the X session is to be started. We want all programs to load asynchronously, hence the =&=
+   #+begin_src bash :tangle ~/dotfiles/X/.xinitrc
+     #!/bin/sh
+     xrdb -merge ~/.Xresources	# ensure .Xresources loaded
+     dunst &				# notifications
+     xrandr &			  # window control
+     autocutsel &			  # manage clipboard 
+     ~/.local/bin/screenoff &
+
+     eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh) # gnome-keyring
+     export SSH_AUTH_SOCK
+
+     exec --no-startup-id nm-applet & # wifi
+     exec emacs --daemon &		 # emacs server for client call
+     xsetroot -cursor_name left_ptr & # better cursor
+     exec /usr/bin/stumpwm		# wm
+   #+end_src
+
+** xsession
+   =~/.xsession= is like =.xinitrc=, but xsession is started from
+   /custom/ in a graphical display manager, while =.xinitrc= is started
+   from =startx= utility, so a recommended way to always get =.xinitrc=
+   is through setting =.xsession= to:
+   #+begin_src bash :tangle ~/dotfiles/X/.xsession
+     #!/bin/sh
+     . ~/.profile
+     . ~/.xinitrc
+   #+end_src
+   See https://unix.stackexchange.com/questions/281858/difference-between-xinitrc-xsession-and-xsessionrc for more details on the differences
+* Emacs
+  When Emacs is launched, it reads an init file (~/.emacs.d/init.el),
+  which is configured using elisp, as the following:
+** Package Management
+   Packages are usually downloaded from an external repository, and
+   use-package is a clean declarative tool to ensure package downloads,
+   configure, and lazy-load them.
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (require 'package)
+     (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+			 (not (gnutls-available-p))))
+	    (proto (if no-ssl "http" "https")))
+       (when no-ssl
+	 (warn "\
+     Your version of Emacs does not support SSL connections,
+     which is unsafe because it allows man-in-the-middle attacks.
+     There are two things you can do about this warning:
+     1. Install an Emacs version that does support SSL and be safe.
+     2. Remove this warning from your init file so you won't see it again."))
+       ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+       (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+       ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+       (when (< emacs-major-version 24)
+	 ;; For important compatibility libraries like cl-lib
+	 (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+     (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+     (package-initialize)
+
+     (unless (package-installed-p 'use-package)
+       (package-refresh-contents)
+       (package-install 'use-package))
+     (eval-when-compile
+       (require 'use-package))
+     (require 'use-package-ensure)
+     (setq use-package-verbose t)
+   #+end_src
+
+   #+RESULTS:
+   : t
+
+** Keybindings
+   Keybindings can be set using the following:
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   (global-set-key (kbd "<f5>") 'other-window)
+   (global-set-key (kbd "C-`") 'linum-mode) ; toggle line numbers
+   #+end_src
+** Base Settings
+   The following is a series of quality-of-life changes
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   (setq-default cursor-type 'bar)		; slim cursor
+   (setq inhibit-startup-screen 1)		; no startup screen
+   (setq initial-scratch-message nil)	; no startup scratch message
+   (setq doc-view-continuous t)		; pull screen view along when cursor reaches edges
+   (setq sentence-end-double-space nil)	; set sentence to end with single space
+   (setq visible-bell nil			; remove annoying bell on C-g
+	 ring-bell-function 'flash-mode-line) ;
+   (defun flash-mode-line ()		   ; flash mode-line on C-g
+     (invert-face 'mode-line)
+     (run-with-timer 0.1 nil #'invert-face 'mode-line))
+   (delete-selection-mode 1)		; delete over a selection region on insert
+   (fset 'yes-or-no-p 'y-or-n-p)		; use "y/n" instead of "yes/no"
+   (global-linum-mode 0)			; no line numbering
+   (global-visual-line-mode 1)		; wrap text
+   (setq fill-column 80)
+   #+end_src
+   Because these were defined in the Xresources, they aren't necessary here
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth)) ;fullscreen start
+   ;; (add-to-list 'default-frame-alist '(fullscreen . maximized)) ;start fullscreen
+   ;; (scroll-bar-mode -1)			; remove scroll bar
+   ;; (tool-bar-mode -1)			; remove toolbar
+   ;; (menu-bar-mode -1)			; remove menu bar
+   #+end_src
+*** TODO Backups
+    https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
+    #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+    (setq backup-directory-alist `(("." . "~/.saves")))
+    (setq backup-by-copying t
+	  delete-old-versions t
+	  kept-new-versions 6
+	  kept-old-versions 2
+	  version-control t)
+    (recentf-mode 0)
+
+    #+end_src
+** Appearance
+*** Theme
+    #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+      ;; (use-package zenburn-theme
+      ;; 	:ensure t
+      ;; 	:init (load-theme 'zenburn t))
+
+      (use-package solarized-theme
+      	:ensure t
+      	:init (load-theme 'solarized-dark t)); or -light
+
+      ;; (use-package leuven-theme
+      ;; 	:ensure t
+      ;; 	:init (load-theme 'leuven t))
+    #+end_src
+*** TODO Mode Line
+    When I use a mode line, I use smart mode line. I haven't tried
+    powerline yet.
+    #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+      (use-package smart-mode-line
+	:ensure t
+	:init
+	(sml/setup))
+    #+end_src
+
+    Show battery with display-battery-mode
+
+    #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+      (display-battery-mode)
+    #+end_src
+
+    system information given with symon:
+        #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+	  ;; (use-package symon
+	  ;;   :ensure t
+	  ;;   :init (setq symon-monitors
+	  ;; 		'(symon-linux-memory-monitor
+	  ;; 		  symon-linux-cpu-monitor
+	  ;; 		  symon-linux-network-rx-monitor
+	  ;; 		  symon-linux-network-tx-monitor
+	  ;; 		  symon-linux-battery-monitor))
+	  ;;   :hook ((after-init-hook) . symon-mode))
+    #+end_src
+** Editing
+   Smartparens helps with parentheses. Paredit and Paredit's successors
+   are probabily better, but I'll update this once I make more use of
+   lisp
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  ;; (use-package smartparens
+  ;;   :hook ((prog-mode text-mode) . smartparens-mode))
+   #+end_src
+   Company provides autocomplete for various packages
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package company
+       :ensure t
+    :init
+    (add-hook 'after-init-hook 'global-company-mode))
+   #+end_src
+   Rainbow delimiters colours parentheses
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package rainbow-delimiters
+       :ensure t
+     :hook ((prog-mode) . rainbow-delimiters-mode))
+   #+end_src
+   Flycheck provides syntax highlighting
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode))
+   #+end_src
+   Yasnippet allows for the insertion of templates
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package yasnippet
+  :ensure t
+  :init
+  (add-to-list 'load-path
+	       "~/.emacs.d/plugins/yasnippet")
+  (require 'yasnippet)
+  (yas-global-mode 1))
+   #+end_src
+   re-builder is an internal package that allows for testing of regular
+   expressions
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (require 're-builder)
+  (setq reb-re-syntax 'string)
+   #+end_src
+** Navigation
+   Paredit:
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (use-package paredit
+    :ensure t
+    :init
+    (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+    (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+    (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+    (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+    (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+    (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+    (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1))))
+   #+end_src
+   which-key displays which key is next on the tree
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode 1))
+   #+end_src
+   helm is an "incremental completion and selection narrowing
+   framework" - in the same niche as ivy, consel, and swiper, which I
+   intend to test out and potentially replace.
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   ;; (use-package helm
+   ;;   :init
+   ;;   (helm-mode t)
+   ;;   :bind
+   ;;   (("M-x" . helm-M-x)
+   ;;    ("C-x r b" . helm-filtered-bookmarks)
+   ;;    ("C-x C-f" . helm-find-files))
+   ;;   ;; :init
+   ;;   ;; (helm-mode 1)
+   ;;   :custom
+   ;;   (helm-mode-fuzzy-match t)
+   ;;   (helm-completion-in-region-fuzzy-match t))
+   #+end_src
+Ace-Window helps in the selection of windows - trialling this before potentially switching to exwm
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     ;; (use-package ace-window
+     ;;   :bind ("M-o" . ace-window)
+     ;;   :config (setq aw-dispatch-always t))
+#+end_src
+   Here is a setup for Ivy+Counsel+Swiper
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package ivy
+       :ensure t
+     :demand
+     :bind ("C-c C-r" . ivy-resume)
+     :config
+     (setq magit-completing-read-function 'ivy-completing-read)
+     (setq projectile-completion-system 'ivy)
+     (setq ivy-use-virtual-buffers nil
+	   ivy-count-format "%d/%d "))
+
+   (ivy-mode 1)
+
+   (use-package swiper
+     :ensure t
+     :config (setq search-default-mode #'char-fold-to-regexp)
+     :bind ("C-s" . swiper))
+
+   (use-package counsel
+     :ensure t
+     :bind (("M-x" . counsel-M-x)
+	    ("C-x C-f" . counsel-find-file)
+	    ("<f1> f" . counsel-describe-function)
+	    ("<f1> v" . counsel-describe-variable)
+	    ("<f1> l" . counsel-find-library)
+	    ("<f2> i" . counsel-info-lookup-symbol)
+	    ("<f2> u" . counsel-unicode-char)
+	    ("C-c g" . counsel-git)
+	    ("C-c j" . counsel-git-grep)
+	    ("C-c k" . counsel-ag)
+	    ("C-x l" . counsel-locate)
+	    ("C-S-o" . counsel-rhythmbox)
+	    ("C-r" . counsel-minibuffer-history)))
+   #+end_src
+Pdf-tools is a better replacement to docView for pdf, djvu etc. files.
+It does so through the "pdf-view" major mode. An interesting ability
+is the minor mode, "pdf-view-midnight-minor-mode", bound to C-c C-r m.
+Following code for pdf-tools taken from [[http://pragmaticemacs.com/emacs/view-and-annotate-pdfs-in-emacs-with-pdf-tools/][Pragmatic Emacs]]. Compatibility ensured with org-pdfview, code taken from 
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package pdf-tools
+       :pin manual ;; manually update
+       :config
+       ;; initialise
+       (pdf-tools-install)
+       ;; open pdfs scaled to fit page
+       (setq-default pdf-view-display-size 'fit-page)
+       ;; automatically annotate highlights
+       (setq pdf-annot-activate-created-annotations t)
+       ;; use normal isearch
+       (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
+
+     ;; (use-package org-pdfview
+     ;;   :ensure t
+     ;;   :config
+     ;;   (eval-after-load 'org '(require 'org-pdfview))
+     ;;   (add-to-list 'org-file-apps 
+     ;; 		    '("\\.pdf\\'" . (lambda (file link)
+     ;; 				      (org-pdfview-open link)))))
+   #+end_src
+
+Dired-x is an inbuilt extension to dired
+
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+(add-hook 'dired-load-hook
+          (lambda ()
+            (load "dired-x")))
+   #+end_src
+
+** Project Management
+   Projectile gives commands and infor for navigating projects. A lot
+   more to it than I currently have tested
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  ;; (use-package projectile)
+  ;; (projectile-mode +1)
+  ;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  ;; (setq projectile-project-search-path '("~/"))
+   #+end_src
+** Cryptography
+   I use pass, which uses password-store.el to interface to emacs
+   #+begin_src bash
+# cd ~/.emacs.d/elisp
+# wget https://git.zx2c4.com/password-store/plain/contrib/emacs/password-store.el
+   #+end_src
+   Which is then loaded using:
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   ;; (load "~/.emacs.d/elisp/password-store")
+   #+end_src
+   Then pass is used as a major mode along with ivy-pass
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   ;; (use-package pass
+   ;;   :ensure t)
+
+   ;; (use-package ivy-pass
+   ;;   :ensure t)
+   #+end_src
+** Git
+   Magit is an exteremely well-made interface ("porcelain") to git.
+   see
+   https://github.com/magit/magit/wiki/Pinning-Magit-to-Melpa-Stable,
+   was having issues with transient commands being invoked from commit
+   message text.
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/")
+             t)
+     (add-to-list 'package-pinned-packages '(magit . "melpa-stable"))
+
+     (add-to-list 'package-pinned-packages '(ghub . "melpa-stable"))
+(add-to-list 'package-pinned-packages '(git-commit . "melpa-stable"))
+(add-to-list 'package-pinned-packages '(magit-popup . "melpa-stable"))
+     (add-to-list 'package-pinned-packages '(with-editor . "melpa-stable"))
+     
+   #+end_src
+** Python
+   The primary mode for python is elpy
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (use-package elpy
+    :ensure t
+    :defer t
+    :init
+    (advice-add 'python-mode :before 'elpy-enable)
+    (setq elpy-rpc-virtualenv-path 'current))
+   #+end_src
+   We set everything to work with python3
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+   (setq flycheck-python-pycompile-executable "python3"
+	 flycheck-python-pylint-executable "python3"
+	 flycheck-python-flake8-executable "python3")
+   (setq python-shell-interpreter "python3"
+	 python-shell-interpreter-args "-i")
+   (setq org-babel-python-command "python3")
+   ;; (python-shell-completion-native-disabled-interpreters (quote ("python3")))
+   #+end_src
+   Using pep8 as the standard
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package py-autopep8
+       :ensure t
+       :init
+       (add-hook 'python-mode-hook 'py-autopep8-enable-on-save))
+     #+end_src
+   Allowing the creation of pyenv environments
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  ;; (use-package pyenv-mode)		;M-x pyvenv-activate
+   #+end_src
+** R
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package ess
+       :init (require 'ess-rutils))
+   #+end_src
+** Lisp
+   Setting up slime to work with common lisp
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+    (use-package slime)
+   ;; (setq inferior-lisp-program "sbcl")
+   ;;   (slime-setup '(slime-company))
+   ;;   (load (expand-file-name "~/quicklisp/slime-helper.el"))
+   #+end_src
+   Let's try add support for scheme in slime:
+#+begin_src bash
+curl https://raw.githubusercontent.com/emacsmirror/slime/master/contrib/swank-mit-scheme.scm > ~/.emacs.d/swank-mit-scheme.scm
+  #+end_src
+
+   Geiser supports scheme programming. Not as good as slime, but does
+   the job.
+
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package geiser
+       :ensure t
+       :config
+       (setq geiser-default-implementation 'mit)
+       (setq geiser-active-implementations '(mit))
+       :hook ((scheme-mode-hook) . geiser-mode))
+   #+end_src
+** Markup
+*** LaTeX
+    *IMPORTANT*: use-package requires the return of a package name,
+    and auctex doesn't necessarily work like that, so auctex needs to
+    be installed directly, if not already installed
+
+   Latex export https://stackoverflow.com/questions/3300497/using-minted-source-code-latex-package-with-emacs-auctex
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (eval-after-load "tex" 
+      '(setcdr (assoc "LaTeX" TeX-command-list)
+	       '("%`%l%(mode) -shell-escape%' %t"
+		 TeX-run-TeX nil (latex-mode doctex-mode) :help "Run LaTeX")))
+   #+end_src
+
+   Get AucTeX to use pdf-tools as the pdf viewer
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+	   TeX-source-correlate-start-server t)
+   #+end_src
+
+   From [[https://tex.stackexchange.com/questions/154751/biblatex-with-biber-configuring-my-editor-to-avoid-undefined-citations/154753#154753][SO: biblatex AuCTex]]:
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (setq tex-bibtex-command "biber")
+     (setq TeX-parse-self t)
+   #+end_src
+**** Bibliography
+reftex: for management of bib files. Doesn't work too well with
+biblatex. Whatever fixed
+https://tex.stackexchange.com/questions/54739/reftex-wont-find-my-bib-file-in-local-library-tree
+doesn't work for me
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+     (add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
+     (setq reftex-plug-into-AUCTeX t)
+     ;; So that RefTeX also recognizes \addbibresource. Note that you
+     ;; can't use $HOME in path for \addbibresource but that "~"
+     ;; works.
+     (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+     (eval-after-load 'reftex-vars
+  '(progn
+     ;; (also some other reftex-related customizations)
+     (setq reftex-cite-format
+           '((?\C-m . "\\cite[]{%l}")
+             (?f . "\\footcite[][]{%l}")
+             (?t . "\\textcite[]{%l}")
+             (?p . "\\parencite[]{%l}")
+             (?o . "\\citepr[]{%l}")
+             (?n . "\\nocite{%l}")))))
+   #+end_src
+   Bibtex should be as biblatex:
+#+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (setq bibtex-dialect 'biblatex)
+   #+end_src  
+   for navigation of bib files:
+#+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  (use-package ivy-bibtex
+    :ensure t)
+   #+end_src   
+ebib is an alternative to reftex, works ok but the keybindings are a
+lot to remember.
+#+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  ;; (use-package ebib
+  ;;   :ensure t
+  ;;   :bind (("C-c C-e" . ebib)
+  ;; 	   ("C-c b" . ebib-insert-citation))
+  ;;   :config
+  ;;   (setq ebib-bibtex-dialect "biblatex")
+  ;;   (setq ebib-layout 'custom))
+   #+end_src   
+*** Org
+    Org is an extremely powerful markup specification, with org agenda and
+    org babel being two especially useful features
+**** Initialisation
+     #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+       (use-package org
+	 ;; :bind
+	 ;; (("\C-cl" . org-store-link)
+	 ;;  ("\C-ca" . org-agenda)
+	 ;;  ("\C-cc" . org-capture)
+	 ;;  ("\C-cb" . org-switchb))
+	 :config
+	 (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
+	 (setq org-agenda-file-regexp
+	       (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
+					 org-agenda-file-regexp))) ;https://emacs.stackexchange.com/questions/36542/include-org-gpg-files-in-org-agenda
+	 (org-babel-do-load-languages
+	  'org-babel-load-languages
+	  '((lisp . t)
+	    (R . t)
+	    (latex . t)
+	    (python . t)
+	    (shell . t)
+	    (scheme . t)))
+	 (setq org-confirm-babel-evaluate nil)
+	 (add-to-list 'org-structure-template-alist
+		      '("r" . "src R :results output :colnames yes :hline yes :session rsession1 :tangle yes :comments link :exports both :eval never-export"))
+	 (add-to-list 'org-structure-template-alist
+		      '("g" . "src R :file chart.png :res 100 :height 400 :width 600 :results output graphics :colnames yes :session rsession1 :exports both :eval never-export"))
+	 (add-to-list 'org-structure-template-alist
+		      '("p" . "src python :results output :colnames yes :session pysession1 :tangle yes :comments link :exports both :eval never-export"))
+	 :custom
+	 (org-list-allow-alphabetical t)
+	 (org-modules
+	  (quote
+	   (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill org-eval org-learn)))
+	 (org-todo-keywords (quote ((sequence "TODO" "WAITING" "|" "CLOSED"))))
+	 (org-drill-cram-hours 0)
+	 (org-log-done 'time)
+	 (org-link-file-path-type "relative")
+	 (org-todo-keywords '((sequence "TODO" "WAITING" "|" "CLOSED")))
+	 (org-agenda-time-grid
+	  (quote
+	   ((daily weekly today)
+	    (800 1000 1200 1400 1600 1800 2000)
+	    "......" "----------------"))))
+
+       (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+       (add-hook 'org-mode-hook 'org-display-inline-images)
+       (if (require 'toc-org nil t)
+       (add-hook 'org-mode-hook 'toc-org-mode)
+       (warn "toc-org not found"))
+     #+end_src
+**** Export
+     I use minted as the latex syntax highlighting engine.
+     Additionally, org toc is useful for the creation of a table of
+     contents especially when exporting to github.
+
+     Pandoc Mode allows for conversion of documents, useful primarily
+     for org mode
+     #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (setq org-latex-minted-options '(("frame" "lines")
+				      ("fontsize" "\\scriptsize")
+				      ("xleftmargin" "\\parindent")
+				      ("linenos" "")))
+     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+     ;; (require 'ox-latex)
+     ;; (setq org-latex-listings (quote minted))
+
+     ;; (use-package toc-org
+     ;; :ensure t)
+
+     ;; (use-package pandoc-mode
+     ;; :ensure t)
+
+     ;; (use-package ox-pandoc
+     ;; :ensure t)
+     #+end_src
+**** Agenda
+ The agenda files are those read in for the agenda:
+     I first used org-super-agenda, but I think I ought to have learnt how
+     to work with the base agenda first - to do
+     #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+       ;; (use-package org-super-agenda)
+
+       ;; (setq org-agenda-skip-scheduled-if-done t
+       ;; 	     org-agenda-skip-deadline-if-done t
+       ;; 	     org-agenda-include-deadlines t
+       ;; 	     org-agenda-include-diary nil
+       ;; 	     org-agenda-block-separator nil
+       ;; 	     org-agenda-compact-blocks t
+       ;; 	     org-agenda-start-with-log-mode t
+       ;; 	     org-agenda-start-on-weekday 1
+       ;; 	     org-deadline-warning-days 30)
+
+       ;; (setq org-agenda-custom-commands
+       ;; 	     '(("v" "week-overview"
+       ;; 		((agenda ""
+       ;; 			 ((org-super-agenda-groups
+       ;; 			   '((:discard (:tag ("drill")
+       ;; 					     :regexp "CLOSED")
+       ;; 				       :order 0)
+       ;; 			     (:name "Residual Tasks"
+       ;; 				    :scheduled past
+       ;; 				    :deadline past
+       ;; 				    :order 2
+       ;; 				    )
+       ;; 			     (:name "Schedule"
+       ;; 				    :time-grid t
+       ;; 				    :order 3)
+       ;; 			     (:name "Current Tasks"
+       ;; 				    :scheduled today
+       ;; 				    :order 4)
+       ;; 			     (:name "Waiting"
+       ;; 				    :todo "WAITING"
+       ;; 				    :order 5)
+       ;; 			     (:name "Unscheduled Future Deadlines"
+       ;; 				    :and (:not (:scheduled future)
+       ;; 					       :deadline future)
+       ;; 				    :order 6)
+       ;; 			     (:name "Future Tasks"
+       ;; 				    :deadline t
+       ;; 				    :scheduled t
+       ;; 				    :order 7)))))
+       ;; 		 (todo "WAITING" ((org-agenda-overriding-header "Waiting")
+       ;; 				  (org-agenda-todo-ignore-with-date 1)))
+       ;; 		 (todo "TODO"
+       ;; 		       ((org-agenda-overriding-header "")
+       ;; 			(org-agenda-todo-ignore-with-date 1)
+       ;; 			(org-super-agenda-groups
+       ;; 			 '((:name "Reserve Tasks"
+       ;; 				  :tag ("reserve")
+       ;; 				  :order 1)
+       ;; 			   (:name "Unscheduled Tasks"
+       ;; 				  :anything t
+       ;; 				  :order 0)))))))))
+
+     #+end_src
+**** Misc.
+     #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+    (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
+    (setq package-check-signature nil)
+     #+end_src
+**** calfw
+ Creates a calendar, integrates well with org
+     #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+       ;; (use-package calfw
+       ;; 	 :ensure t)
+       ;; (use-package calfw-org
+       ;; 	 :ensure t)
+     #+end_src
+ use M-x cfw:open-org-calendar to open org calendar
+**** ref
+     Org-ref doesn't work too well with biblatex. I will instead use
+     auctex and reftex, as well as ebib when I need something higher-level.
+     #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+       ;; (use-package org-ref
+       ;; 	 :ensure t
+       ;; 	 :config
+       ;; 	 (require 'org-id)
+       ;; 	 (require 'org-ref-wos)
+       ;; 	 (require 'org-ref-scopus)
+       ;; 	 (require 'org-ref-pubmed)
+       ;; 	 (require 'doi-utils)
+       ;; 	 (setq bibtex-autokey-year-length 4
+       ;; 	 bibtex-autokey-name-year-separator "-"
+       ;; 	 bibtex-autokey-year-title-separator "-"
+       ;; 	 bibtex-autokey-titleword-separator "-"
+       ;; 	 bibtex-autokey-titlewords 2
+       ;; 	 bibtex-autokey-titlewords-stretch 1
+       ;; 	 bibtex-autokey-titleword-length 5)
+       ;; 	 (setq org-export-with-broken-links t)
+       ;; 	 ;; (setq org-latex-pdf-process
+       ;; 	 ;;       '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+       ;; 	 ;; 	"bibtex %b"
+       ;; 	 ;; 	"makeindex %b"
+       ;; 	 ;; 	"pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+       ;; 	 ;; 	"pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
+       ;; 	 (setq  org-latex-pdf-process
+       ;; 	'("latexmk -shell-escape -bibtex -pdf %f"))
+       ;; 	 (setq org-ref-completion-library 'org-ref-ivy-cite))
+     #+end_src
+*** Misc
+   Markdown
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package markdown-mode
+       :defer t)
+   #+end_src
+
+   Polymode for the unfortunate times using R Markdown instead of org
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package polymode
+       :ensure t)
+
+     (use-package poly-R
+       :ensure t)
+
+     (use-package poly-markdown
+       :ensure t)
+
+     (use-package poly-org
+       :ensure t)
+   #+end_src
+** Misc
+   Yet to play with ledger
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+  ;; (use-package ledger-mode
+  ;;   :defer t)
+   #+end_src
+
+   Very nice to have consistency in REPL - would be nice if geiser
+   worked with MIT scheme - keeps opening up a new session every time
+   at the moment. Note: fixed. Must push PR. 
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package eval-in-repl
+       :ensure t
+       :init
+       (require 'eval-in-repl-ielm)
+       (define-key emacs-lisp-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+       ;; for *scratch*
+       (define-key lisp-interaction-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+       ;; for M-x info
+       (define-key Info-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+       ;;; Geiser support (for Racket and Guile Scheme)
+       ;; When using this, turn off racket-mode and scheme supports
+       ;; (require 'geiser) ; if not done elsewhere
+       (add-hook 'geiser-mode-hook
+       		  '(lambda ()
+       		     (local-set-key (kbd "<C-return>") 'eir-eval-in-geiser)))
+
+       ;; (require 'scheme)    ; if not done elsewhere
+       ;; (require 'cmuscheme) ; if not done elsewhere
+       ;; (require 'eval-in-repl-scheme)
+       ;; (add-hook 'scheme-mode-hook
+       ;; 		 '(lambda ()
+       ;; 		    (local-set-key (kbd "<C-return>") 'eir-eval-in-scheme)))
+       
+       ;; shell support
+       (require 'eval-in-repl-shell)
+       (add-hook 'sh-mode-hook
+		 '(lambda()
+		    (local-set-key (kbd "C-<return>") 'eir-eval-in-shell))))
+   #+end_src
+** MIX
+The [[https://www.gnu.org/software/mdk/manual/mdk.html][MIX Development Kit]] provides a set of tools to use MIX from TAOCP.
+The kit needs to be downloaded then installed, then the .el file
+sourced for emacs support.
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     ;; (setq load-path (cons "/usr/local/share/mdk" load-path))
+     ;; (autoload 'mixal-mode "mixal-mode" t)
+     ;; (add-to-list 'auto-mode-alist '("\\.mixal\\'" . mixal-mode))
+     ;; (autoload 'mixvm "mixvm" "mixvm/gud interaction" t)
+   #+end_src
+
+** J
+Interesting language to try out, especially for linear algebra and
+graphics
+
+   #+begin_src elisp :tangle ~/dotfiles/emacs/.emacs.d/init.el
+     (use-package j-mode
+       :ensure t
+       :init
+       (local-set-key (kbd "C-c !") 'j-console)
+       (local-set-key (kbd "C-<return>") 'j-console-execute-line)
+       (custom-set-faces
+	'(j-verb-face ((t (:foreground "Red"))))
+	'(j-adverb-face ((t (:foreground "Green"))))
+	'(j-conjunction-face ((t (:foreground "Blue"))))
+	'(j-other-face ((t (:foreground "Black"))))))
+   #+end_src
+
+* Bash
+** Scripts
+   [[https://wiki.archlinux.org/index.php/HiDPI#X_Resources][Arch Wiki]] gives some idea about how to configure X Resources such that
+   dpi is set properly; this may be worth implementing with a script
+*** Connect-Screen-Off
+    To turn off the laptop screen when connected to an external (HDMI) monitor:
+    #+begin_src bash :shebang "#!/usr/bin/env bash" :tangle ~/dotfiles/bash/.local/bin/screenoff
+      EXTERNAL_OUTPUT="HDMI-1"
+      INTERNAL_OUTPUT="eDP-1"
+
+      xrandr |grep $EXTERNAL_OUTPUT | grep " connected "
+      if [ $? -eq 0 ]; then
+	  xrandr --output $INTERNAL_OUTPUT --off
+      fi
+    #+end_src
+** .bashrc
+The bashrc contains the initial settings for bash.
+*** Original
+The following is a clone of what I initially found there (don't want
+to break anything)
+#+begin_src bash :tangle ~/dotfiles/bash/.bashrc
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    #alias grep='grep --color=auto'
+    #alias fgrep='fgrep --color=auto'
+    #alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+#alias ll='ls -l'
+#alias la='ls -A'
+#alias l='ls -CF'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+export EDITOR=vim # emacsclient
+#+end_src
+*** Environmental Variables
+#+begin_src bash :tangle ~/dotfiles/bash/.bashrc
+  PDFVIEWER_texdoc=zathura
+#+end_src
+*** Aliases
+#+begin_src bash :tangle ~/dotfiles/bash/.bashrc
+  alias bm='bashmount'
+  alias upw="pass show --clip 'Public/University of Auckland'"
+#+end_src
+*** PATH
+#+begin_src bash :tangle ~/dotfiles/bash/.bashrc
+  export PATH="/home/user/.local/bin:$PATH"
+  # export PATH="/home/user/.config/guix/current/bin${PATH:+:}$PATH"
+  # export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
+#+end_src
+* Stumpwm
+  Using Stumpwm as the window manager.
+** General
+   some general configurations, borrowing heavily from
+   https://github.com/benjamin-james/dotfiles/blob/master/.stumpwmrc:
+   #+begin_src lisp :tangle ~/dotfiles/stumpwm/.stumpwmrc
+     (in-package :stumpwm)
+
+     (setq *startup-message* "Welcome back, Jason")
+
+     ;; (global "XF86MonBrightnessUp" "increase-brightness")
+     ;; (global "XF86MonBrightnessDown" "decrease-brightness")
+     ;; (global "XF86AudioRaiseVolume" "increase-volume")
+     ;; (global "XF86AudioLowerVolume" "decrease-volume")
+     ;; (global "XF86AudioMute" "mute")
+     ;; (global "XF86AudioNext" "next-song")
+     ;; (global "XF86AudioPrev" "prev-song")
+     ;; (global "XF86AudioStop" "stop-song")
+     ;; (global "XF86AudioPlay" "play-song")
+     ;; (global "Print" "screenshot")
+
+     (setf *mouse-focus-policy* :click) 
+     (setf *window-border-style* :thin) ;; :none :thick :thin :tight -- no borders
+
+     ;; Message window
+
+     ;;;; Message window gravity
+     ;; ; :top-left :top-right :bottom-left :bottom-right :center
+     (setq *message-window-gravity* :center)
+
+     ;;;; Input window gravity
+     ;; ; :top-left :top-right :bottom-left :bottom-right :center
+     (setq *input-window-gravity* :center)
+
+     ;; (set-win-bg-color "#222")
+     ;; (set-focus-color "yellow")
+     ;; (set-unfocus-color "#222")
+   #+end_src
+** Base Keybindings
+   The keybindings (borrowing from
+   https://github.com/kostafey/dotfiles/blob/master/.stumpwmrc)
+   #+begin_src lisp :tangle ~/dotfiles/stumpwm/.stumpwmrc
+     (set-prefix-key (kbd "C-;"))
+     (define-key *top-map* (kbd "s-Up") "move-focus up")
+     (define-key *top-map* (kbd "s-Down") "move-focus down")
+     (define-key *top-map* (kbd "s-Left") "move-focus left")
+     (define-key *top-map* (kbd "s-Right") "move-focus right")
+
+     (define-key *top-map* (kbd "s-M-Up") "pull-hidden-next")
+     (define-key *top-map* (kbd "s-M-Down") "pull-hidden-previous")
+     (define-key *top-map* (kbd "s-M-Left") "prev")
+     (define-key *top-map* (kbd "s-M-Right") "next")
+
+     (define-key *top-map* (kbd "C-s-Up") "move-window up")
+     (define-key *top-map* (kbd "C-s-Down") "move-window down")
+     (define-key *top-map* (kbd "C-s-Left") "move-window left")
+     (define-key *top-map* (kbd "C-s-Right") "move-window right")
+
+     (define-key *root-map* (kbd "1") "only")
+     (define-key *root-map* (kbd "2") "vsplit")
+     (define-key *root-map* (kbd "3") "hsplit")
+     (define-key *root-map* (kbd "0") "remove-split")
+     ;; (kbd "C-d r") - interactive resize
+   #+end_src
+** Swank Server
+   Enable a swank server so that stump can be programmed in an REPL
+   (Here, SLIME in emacs), set up as per
+   https://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.html
+   #+begin_src lisp :tangle ~/dotfiles/stumpwm/.stumpwmrc
+     ;; (require :swank)
+     ;; (swank-loader:init)
+     ;; (swank:create-server :port 4004
+     ;; 		     :style swank:*communication-style*
+     ;; 		     :dont-close t)
+   #+end_src
+** Application Loading
+   #+begin_src lisp :tangle ~/dotfiles/stumpwm/.stumpwmrc
+     (defcommand emacs () ()
+       "run-or-raise emacs"
+       (run-or-raise "emacsclient -ca emacs" '(:class "Emacs")))
+     (define-key *root-map* (kbd "e") "emacs")
+
+     (defcommand browser () ()
+       "run or raise qutebrowser"
+       (run-or-raise "qutebrowser" '(:class "Qutebrowser")))
+     (define-key *root-map* (kbd "w") "browser")
+
+     (defcommand firefox () ()
+       "run or raise firefox"
+       (run-or-raise "firefox" '(:class "Firefox")))
+     (define-key *root-map* (kbd "C-w") "firefox")
+
+     (defcommand dmenu_run () ()
+       "run or raise dmenu"
+       (run-or-raise "dmenu_run" '(:class "dmenu")))
+     (define-key *root-map* (kbd "C-r") "dmenu_run")
+   #+end_src
+** Pass Module
+   Integrate with =pass= through the [[https://github.com/stumpwm/stumpwm-contrib/tree/master/util/pass][pass module]]
+   #+begin_src lisp :tangle ~/dotfiles/stumpwm/.stumpwmrc
+     ;; (load-module "pass")
+     ;; (setq pass:*password-store* "~/pass")	;The pass:*password-store* variable defines the home directory,”~/.password-store/” by default.
+     ;; (define-key *root-map* (kbd "t") "pass-copy") ;select an entry to put into the clipboard. (Auto-completion is available.)
+     ;; (define-key *root-map* (kbd "t") "pass-copy") ;select an entry from a menu to put into the clipboard.
+     ;; (define-key *root-map* (kbd "t") "pass-generate") ;generate a password for a new given entry and put it into the clipboard.
+   #+end_src
+   There is the possibility to add a modeline (inbuilt with stump) but I
+   find them not worth the space they take up, for the unnecessary
+   information they provide.
+

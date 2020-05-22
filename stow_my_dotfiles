@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+stow bash
+stow --no-folding bspwm
+stow --no-folding emacs
+stow git
+stow --no-folding qutebrowser
+stow readline
+stow stumpwm
+stow --no-folding sxhkd
+stow tmux
+stow --no-folding vim
+stow X

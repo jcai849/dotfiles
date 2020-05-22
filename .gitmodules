@@ -1,0 +1,3 @@
+[submodule "vim/.vim/plugin/send-to-pane"]
+	path = vim/.vim/plugin/send-to-pane
+	url = https://github.com/jcai849/send-to-pane.git

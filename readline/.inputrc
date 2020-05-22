@@ -1,0 +1,5 @@
+set editing-mode vi
+set show-mode-in-prompt on
+set bind-tty-special-chars off
+set enable-meta-key off
+

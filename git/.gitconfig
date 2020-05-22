@@ -1,0 +1,6 @@
+[user]
+	name = Jason Cairns
+	email = jcai849@aucklanduni.ac.nz
+
+[credential]
+	helper = store
