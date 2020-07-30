@@ -409,4 +409,4 @@ c.colors.tabs.selected.odd.fg = solarized['base3']
 ## Type: QtColor
 # c.colors.webpage.bg = 'white'
 
-c.qt.highdpi = True
+# c.qt.highdpi = True

@@ -9,3 +9,4 @@ stow --no-folding sxhkd
 stow tmux
 stow --no-folding vim
 stow X
+stow lynx
