@@ -1,5 +1,5 @@
 PDFVIEWER_texdoc=zathura
 PATH=${PATH}:~/bin
-JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PDFVIEWER_texdoc PATH 
 eval `ssh-agent -s` > /dev/null
 fortune
