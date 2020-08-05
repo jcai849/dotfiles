@@ -174,7 +174,7 @@ file_sorting_method=BY_FILENAME
 # NOTE: Some fixed format documents may look disfigured when
 # "LINKS_ARE_NUMBERED" or "LINKS_AND_FORM_FIELDS_ARE_NUMBERED" are
 # enabled.
-keypad_mode=LINKS_ARE_NUMBERED
+keypad_mode=LINKS_ARE_NOT_NUMBERED
 
 # lineedit_mode specifies the key binding used for inputting strings in
 # prompts and forms.  If lineedit_mode is set to "Default Binding" then
