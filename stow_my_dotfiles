@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 stow sh
-stow bash
 stow git
 stow --no-folding vim
 stow readline
