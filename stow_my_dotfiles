@@ -3,7 +3,6 @@
 stow sh
 stow git
 stow --no-folding vim
-stow readline
 stow tmux
 stow lynx
 stow X
