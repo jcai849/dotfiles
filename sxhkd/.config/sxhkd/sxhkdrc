@@ -2,6 +2,9 @@
 super + Return
 	urxvt
 
+super + o
+	qutebrowser
+
 # program launcher
 super + @space
 	dmenu_run
