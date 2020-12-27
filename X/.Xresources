@@ -1,6 +1,6 @@
 !Xft.dpi: 144
 
-*faceName: Inconsolata
+!*faceName: Inconsolata
 *faceSize: 12
 *renderFont: true
 Xft.autohint: 0

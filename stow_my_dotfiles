@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 stow sh
 stow git
 stow --no-folding vim
@@ -9,3 +7,4 @@ stow X
 stow --no-folding bspwm
 stow --no-folding sxhkd
 stow --no-folding qutebrowser
+stow --no-folding surfraw
