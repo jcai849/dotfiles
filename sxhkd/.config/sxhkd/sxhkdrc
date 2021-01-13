@@ -4,7 +4,7 @@ super + Return
 
 # web browser
 super + o
-	surf
+	iridium
 
 # program launcher
 super + @space

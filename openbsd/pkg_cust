@@ -1,0 +1,9 @@
+cpan Module::Build
+
+cd /tmp
+curl -L https://sourceforge.net/projects/biblatex-biber/files/biblatex-biber/current/biblatex-biber.tar.gz/download >biblatex-biber.tar.gz
+tar xzf biblatex-biber.tar.gz
+cd biblatex-biber-*
+doas perl Build installdeps Build.PL
+doas perl Build test
+doas perl Build install
