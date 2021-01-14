@@ -4,7 +4,7 @@ super + Return
 
 # web browser
 super + o
-	iridium
+	netsurf-gtk3
 
 # program launcher
 super + @space

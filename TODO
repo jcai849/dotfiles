@@ -1,5 +1,0 @@
-* Send all old files to appropriate archive directories
-** Keep list of music instead of the actual files; clear out unnecessary films
-* Copy full backup to another external hard drive
-* Format and encrypt hard drive
-* neaten up what-todo with `sed` instead of head in .bashrc
