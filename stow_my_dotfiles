@@ -6,4 +6,3 @@ stow lynx
 stow X
 stow --no-folding bspwm
 stow --no-folding sxhkd
-stow --no-folding surfraw
