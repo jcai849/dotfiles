@@ -103,7 +103,7 @@ URxvt.scrollstyle: plain
 URxvt*termName: xterm-256color
 URxvt.visualBell: false
 URxvt.fading: 15
-URxvt.urlLauncher: qutebrowser
+URxvt.urlLauncher: iridium
 ! URxvt.urgentOnBell: true
 ! URxvt.internalBorder: 3
 ! URxvt.depth: 24
